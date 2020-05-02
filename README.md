@@ -37,7 +37,7 @@ as well. By default, it is assumed that this is your main AWS profile (profile n
 ezws.sh add
 enter a friendly name for this instance: <type_your_friendly_name>
 enter the instance id: <paste_instance_id>
-enter the path to the private ssh key: [/home/quant/.ssh/aws-default.pem] <press enter to keep, type new path to change>
+enter the path to the private ssh key: [$HOME/.ssh/aws-default.pem] <press enter to keep, type new path to change>
 enter profile: [default] <press enter to keep, type new profile to change>
 ```
 2. `list` listing all added nodes
@@ -113,7 +113,7 @@ ezws.sh reindex
 ```
 
 
-# install
+#zi install
 
 Clone this repository into a permanent location on your machine. After you 
 follow these instructions you will want to keep this folder/repository around. If you copy
