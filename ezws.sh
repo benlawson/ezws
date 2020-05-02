@@ -3,6 +3,7 @@ set -e
 VERSION=0.0.1
 command=$1
 friendlyName=$2
+sshfsRemoteDirectory=$3
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -50,7 +51,7 @@ case $command in
        echo "    startup: start a aws instance and ssh to it"
        echo "    stop: stop a running instance"
        echo "    sftp: sftp to an already running instance"
-       echo "    sshfs: use sshfs to mount the root directory of an already running instance to the cwd"
+       echo "    sshfs: use sshfs to mount the root directory (default) or a specified directory (command line argument) of an already running instance to the cwd"
        echo "    bind: bind a port to an already running instance"
        echo "    reindex: add all the added machines to tab completion"
        echo "exiting"
@@ -182,7 +183,7 @@ case $command in
 
         #connect to node
         echo $publicIpAddress
-        sshfs ubuntu@$publicIpAddress:/ . -o IdentityFile=$pathToPrivateKey
+        sshfs ubuntu@$publicIpAddress:/$sshfsRemoteDirectory . -o IdentityFile=$pathToPrivateKey
         ;;
    stop)
 
