@@ -3,7 +3,7 @@ set -e
 VERSION=0.0.1
 command=$1
 friendlyName=$2
-arg3=$3
+sshfsRemoteDirectory=$3
 
 current_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -183,7 +183,7 @@ case $command in
 
         #connect to node
         echo $publicIpAddress
-        sshfs ubuntu@$publicIpAddress:/$arg3 . -o IdentityFile=$pathToPrivateKey
+        sshfs ubuntu@$publicIpAddress:/$sshfsRemoteDirectory . -o IdentityFile=$pathToPrivateKey
         ;;
    stop)
 
