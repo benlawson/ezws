@@ -18,7 +18,7 @@
 1. `bind`: bind a ports between remote and local machines (ssh protocol)
 1. `reindex`: re-adds all the added machines to tab completion (this needs to be run after each update)
 
-note: your AWS IAM profile will need the expected permissions to run these commands. To look up an instance's IP address, the permission for `ec2:DescribeInstances` is also required. Contact your AWS administrator to for these permissions. 
+note: your AWS IAM profile will need the expected permissions to run these commands. To look up an instance's IP address, the permission for `ec2:DescribeInstances` is also required. Contact your AWS administrator to get this permission if you do not already have it. 
 
 ### full guide
 1. `add` adding a new AWS node
