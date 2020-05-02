@@ -1,5 +1,4 @@
-# ezws
-> ![ezws](./image.png)
+![ezws](./image.png)
 
 ## about
 `ezwsh.sh` is a thin wrapper for AWS CLI, specifically for the EC2 functionally. If you have to start or stop a machine, the IP address will change. This wrapper looks up what the current IP address is when you try to connect to a given node, among other useful features. 
