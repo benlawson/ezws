@@ -162,9 +162,9 @@ case $command in
                 ;;
         esac
 
-        echo "binding port $localPort to $publicIpAddress:$remotePort"
+        echo "binding port $localPort to $IpAddress:$remotePort"
 
-        ssh -N -f -L localhost:$localPort:localhost:$remotePort ubuntu@$publicIpAddress -i $pathToPrivateKey
+        ssh -N -f -L localhost:$localPort:localhost:$remotePort ubuntu@$IpAddress -i $pathToPrivateKey
 
         ;;
     sftp)
@@ -179,8 +179,8 @@ case $command in
 
 
         #connect to node
-        echo $publicIpAddress
-        sftp -i $pathToPrivateKey ubuntu@$publicIpAddress
+        echo $IpAddress
+        sftp -i $pathToPrivateKey ubuntu@$IpAddress
         ;;
     sshfs)
 
@@ -194,8 +194,8 @@ case $command in
 
 
         #connect to node
-        echo $publicIpAddress
-        sshfs ubuntu@$publicIpAddress:/$sshfsRemoteDirectory . -o IdentityFile=$pathToPrivateKey
+        echo $IpAddress
+        sshfs ubuntu@$IpAddress:/$sshfsRemoteDirectory . -o IdentityFile=$pathToPrivateKey
         ;;
    stop)
 
