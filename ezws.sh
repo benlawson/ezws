@@ -59,6 +59,18 @@ case $command in
     ;;
 esac
 
+robust_get_ip() {
+    # Try public IP, and if none, the private IP (used if on a VPN)
+    publicIpAddress="$(describe --instance-ids $instance_id --query 'Reservations[*].Instances[*].PublicIpAddress' --output text --profile $profile)"
+    if [$publicIpAddress == '']
+      then
+        privateIpAddress="$(describe --instance-ids $instance_id --query 'Reservations[*].Instances[*].PrivateIpAddress' --output text --profile $profile)"
+        echo $privateIpAddress
+      else
+        echo $publicIpAddress
+    fi
+
+}
 
 describe() {
     # echo is how we are returning a string value
@@ -97,11 +109,11 @@ case $command in
             then echo "machine not running"; exit;
         fi
 
-        #grab the public ip address from aws
-        publicIpAddress="$(describe --instance-ids $instance_id --query 'Reservations[*].Instances[*].PublicIpAddress' --output text --profile $profile)"
+        #grab the ip address from aws
+        IpAddress="$(robust_get_ip)"
 
         #add node to known hosts (skip fingerprint question)
-        ssh-keyscan -H $publicIpAddress >> ~/.ssh/known_hosts
+        ssh-keyscan -H $IpAddress >> ~/.ssh/known_hosts
 
         # add key to ssh-agent to enable key forwarding
         case "$(uname -s)" in
@@ -112,8 +124,8 @@ case $command in
 
 
         #connect to node
-        echo $publicIpAddress
-        ssh -A -i $pathToPrivateKey ubuntu@$publicIpAddress
+        echo $IpAddress
+        ssh -A -i $pathToPrivateKey ubuntu@$IpAddress
         ;;
     bind)
 
@@ -126,8 +138,8 @@ case $command in
         localPort=$3
         remotePort=$4
 
-        #grab the public ip address from aws
-        publicIpAddress="$(describe --instance-ids $instance_id --query 'Reservations[*].Instances[*].PublicIpAddress' --output text --profile $profile)"
+        #grab the ip address from aws
+        IpAddress="$(robust_get_ip)"
 
         case $localPort in
             [0-9][0-9][0-9][0-9]|[0-9][0-9][0-9][0-9][0-9]) #just check if it is a 4- or 5-digit number
@@ -150,9 +162,9 @@ case $command in
                 ;;
         esac
 
-        echo "binding port $localPort to $publicIpAddress:$remotePort"
+        echo "binding port $localPort to $IpAddress:$remotePort"
 
-        ssh -N -f -L localhost:$localPort:localhost:$remotePort ubuntu@$publicIpAddress -i $pathToPrivateKey
+        ssh -N -f -L localhost:$localPort:localhost:$remotePort ubuntu@$IpAddress -i $pathToPrivateKey
 
         ;;
     sftp)
@@ -162,13 +174,13 @@ case $command in
             then echo "machine not running"; exit;
         fi
 
-        #grab the public ip address from aws
-        publicIpAddress="$(describe --instance-ids $instance_id --query 'Reservations[*].Instances[*].PublicIpAddress' --output text --profile $profile)"
+        #grab the ip address from aws
+        IpAddress="$(robust_get_ip)"
 
 
         #connect to node
-        echo $publicIpAddress
-        sftp -i $pathToPrivateKey ubuntu@$publicIpAddress
+        echo $IpAddress
+        sftp -i $pathToPrivateKey ubuntu@$IpAddress
         ;;
     sshfs)
 
@@ -177,13 +189,13 @@ case $command in
             then echo "machine not running"; exit;
         fi
 
-        #grab the public ip address from aws
-        publicIpAddress="$(describe --instance-ids $instance_id --query 'Reservations[*].Instances[*].PublicIpAddress' --output text --profile $profile)"
+        #grab the ip address from aws
+        IpAddress="$(robust_get_ip)"
 
 
         #connect to node
-        echo $publicIpAddress
-        sshfs ubuntu@$publicIpAddress:/$sshfsRemoteDirectory . -o IdentityFile=$pathToPrivateKey
+        echo $IpAddress
+        sshfs ubuntu@$IpAddress:/$sshfsRemoteDirectory . -o IdentityFile=$pathToPrivateKey
         ;;
    stop)
 
